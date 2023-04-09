@@ -16,6 +16,9 @@ The website I am scraping is the official Energy Market Authority (EMA).
 ## What happens under the hood
 ?
 
+## Why am I doing this?
+Honestly, I just wanted to try out Selenium + BeautifulSoup.
+
 ## Future Projects
 - [ ] Implement Gas Service Worker licenses.
 - [ ] Migrate the project over to front-end instead of command line.
