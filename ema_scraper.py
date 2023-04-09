@@ -34,7 +34,8 @@ def bypass_captcha(browser):
         spinner.start()
         captchaImg = browser.find_element(By.ID, "img")
         captchaImg.screenshot('./captchas/captcha.png')
-        api_key = 'YOUR_2CAPTCHA_API_KEY'
+        api_key = 'YOUR_API_KEY'
+        # print(api_key)  # remove this later
         solver = TwoCaptcha(api_key)
         try:
             result = solver.normal('./captchas/captcha.png')
@@ -92,7 +93,7 @@ def scrape():
     scrape_data(browser)
     while True:
         user_input = input("Enter the license ID or type 'q' to quit: ")
-        if user_input == 'q':
+        if user_input.lower() == 'q':
             break
         # check scraped_ids for user_input
         if user_input in scraped_ids:
