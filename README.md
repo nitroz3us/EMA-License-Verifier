@@ -5,13 +5,13 @@ Handyman services, which include electrical and gas works, are commonly advertis
 ## Solution (Currently Electricians only)
 A tool to verify Handyman services from licensed contractors. 
 
-<img src="https://github.com/nitroz3us/EMA-Scraper/blob/main/img/expected_output.png" width="80%" /> 
+<img src="https://github.com/nitroz3us/EMA-Scraper/blob/main/img/expected_output.png" width="70%" /> 
 
 
 ## Scraped Website
 The website I am scraping is the official Energy Market Authority (EMA). 
 
-<img src="https://github.com/nitroz3us/EMA-Scraper/blob/main/img/ema_main_website.png" width="80%" /> 
+<img src="https://github.com/nitroz3us/EMA-Scraper/blob/main/img/ema_main_website.png" width="70%" /> 
 
 ## What happens under the hood
 ?
