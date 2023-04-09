@@ -70,7 +70,6 @@ def scrape_data(browser):
 
 
 def scrape():
-    user_input = input("Enter the license ID: ")
     # Launch browser
     print("1. Launching Browser...")
     browser = launch_browser()
@@ -86,11 +85,15 @@ def scrape():
     scrape_data(browser)
     # pass
     print("Scraping completed.")
-    # check scraped_ids for user_input
-    if user_input in scraped_ids:
-        print("License ID found.")
-    else:
-        print("License ID not found.")
+    while True:
+        user_input = input("Enter the license ID or type 'q' to quit: ")
+        if user_input == 'q':
+            break
+        # check scraped_ids for user_input
+        if user_input in scraped_ids:
+            print("License ID found.")
+        else:
+            print("License ID not found.")
 
 
 if __name__ == '__main__':
