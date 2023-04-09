@@ -13,6 +13,9 @@ The website I am scraping is the official Energy Market Authority (EMA).
 
 <img src="https://github.com/nitroz3us/EMA-Scraper/blob/main/img/ema_main_website.png" width="70%" /> 
 
+## What happens under the hood
+?
+
 ## Future Projects
 - [ ] Implement Gas Service Worker licenses.
 - [ ] Migrate the project over to front-end instead of command line.
