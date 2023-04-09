@@ -6,7 +6,6 @@ from twocaptcha import TwoCaptcha
 from bs4 import BeautifulSoup
 from apscheduler.schedulers.background import BackgroundScheduler
 from halo import Halo  # import Halo package
-from colored import fg, attr
 import re
 import atexit
 
