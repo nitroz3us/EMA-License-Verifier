@@ -7,4 +7,6 @@ However, there is no easy way for individuals to verify whether these contractor
 An online platform to find Handyman services from licensed contractors. This platform will allow users to find licensed contractors easily and hire them. Payment is also handled on this platform.
 ## Scraped Website
 
-
+## Future Projects
+- [ ] Implement Gas Service Worker licenses.
+- [ ] Migrate the project over to front-end instead of command line.
