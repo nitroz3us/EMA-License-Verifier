@@ -22,5 +22,3 @@ Honestly, I just wanted to try out Selenium + BeautifulSoup.
 ## Future Projects
 - [ ] Implement Gas Service Worker licenses.
 - [ ] Migrate the project over to front-end instead of command line.
-- [ ] Make a mobile application?
-
