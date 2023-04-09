@@ -1,0 +1,6 @@
+html5lib==1.1
+bs4==0.0.1
+2captcha-python==1.2.0
+selenium==4.8.3
+lxml
+APScheduler
