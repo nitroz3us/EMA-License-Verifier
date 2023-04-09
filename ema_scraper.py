@@ -4,11 +4,12 @@ from selenium.webdriver.support.ui import Select
 from selenium.webdriver.common.by import By
 from twocaptcha import TwoCaptcha
 from bs4 import BeautifulSoup
+from apscheduler.schedulers.background import BackgroundScheduler
 import re
 import atexit
-import os
 
-from apscheduler.schedulers.background import BackgroundScheduler
+
+scraped_ids = []
 
 
 def launch_browser():
@@ -30,8 +31,7 @@ def bypass_captcha(browser):
     print("2. Bypassing CAPTCHA...")
     captchaImg = browser.find_element(By.ID, "img")
     captchaImg.screenshot('./captchas/captcha.png')
-    # api_key = os.getenv('EMA_API_2CAPTCHA')
-    api_key = 'EMA_API_2CAPTCHA'
+    api_key = 'YOUR_2CAPTCHA_API_KEY'
     print(api_key)  # remove this later
     solver = TwoCaptcha(api_key)
     try:
@@ -64,11 +64,13 @@ def scrape_data(browser):
         data = [item.strip() for item in data]
         # remove (hp)
         data = [re.sub(r'\(Hp\)', '', item) for item in data]
-        print(data)
+        # assume the license ID is the first element in the array
+        scraped_ids.append(data[0])
+    # print(scraped_ids)
 
 
-# @app.route("/ema", methods=['POST'])
 def scrape():
+    user_input = input("Enter the license ID: ")
     # Launch browser
     print("1. Launching Browser...")
     browser = launch_browser()
@@ -80,10 +82,15 @@ def scrape():
 
     # Bypass CAPTCHA
     bypass_captcha(browser)
-    # Use beautifulsoup to scrap the data
+    # Use beautifulsoup to scrape the data
     scrape_data(browser)
     # pass
     print("Scraping completed.")
+    # check scraped_ids for user_input
+    if user_input in scraped_ids:
+        print("License ID found.")
+    else:
+        print("License ID not found.")
 
 
 if __name__ == '__main__':
