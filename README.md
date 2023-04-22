@@ -4,7 +4,7 @@ A web scraper to check valid licenses in Energy Market Authority (EMA) website.
 **Currently it works locally on Linux/MacOS.**
 ## Problem Statement
 Handyman services, which include electrical and gas works, are commonly advertised through stickers and online platforms. However, it can be difficult for individuals to verify whether these contractors are licensed, which can result in poor workmanship and service dissatisfaction. Engaging unlicensed or inexperienced service providers may even pose safety risks during and after the service is provided.
-## Solution (Currently Electricians & Gas Workers only)
+## Solution
 A tool to verify Handyman services from licensed contractors **who offers services to consumer.** 
 
 <img src="https://github.com/nitroz3us/EMA-Scraper/blob/main/img/expected_output.png" width="70%" /> 
