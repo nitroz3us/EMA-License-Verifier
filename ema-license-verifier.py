@@ -13,7 +13,7 @@ import atexit
 
 scraped_electrician_ids = []
 scraped_gas_workers_ids = []
-scraped_cable_workers_ids = []  # TODO: add cable worker scraper
+scraped_cable_workers_ids = []
 
 
 def launch_browser():
@@ -57,7 +57,7 @@ def bypass_captcha(browser):
 
 def scrape_electrical_worker_data(browser):
     # use Halo to display spinner
-    with Halo(text='2. Scraping electical worker data...', spinner='dots') as spinner:
+    with Halo(text='2. Scraping Electical Worker data...', spinner='dots') as spinner:
         page_source = browser.page_source
         soup = BeautifulSoup(page_source, "lxml")
 
@@ -81,12 +81,12 @@ def scrape_electrical_worker_data(browser):
             scraped_electrician_ids.append(data[0])
 
         # use Halo to display success message
-        spinner.succeed('Scraping electrical worker complete')
+        spinner.succeed('Scraping Electical Worker complete')
 
 
 def scrape_gas_service_worker_data(browser):
     # use Halo to display spinner
-    with Halo(text='2. Scraping gas service worker data...', spinner='dots') as spinner:
+    with Halo(text='2. Scraping Gas Service Worker data...', spinner='dots') as spinner:
         page_source = browser.page_source
         soup = BeautifulSoup(page_source, "lxml")
 
@@ -109,28 +109,55 @@ def scrape_gas_service_worker_data(browser):
             scraped_gas_workers_ids.append(data[0])
 
         # use Halo to display success message
-        spinner.succeed('Scraping gas service worker complete')
+        spinner.succeed('Scraping Gas Service Worker complete')
 
 
 def scrape_cable_worker_data(browser):
-    return "TODO scrape cable worker data"
+    # use Halo to display spinner
+    with Halo(text='2. Scraping Cable Detection Worker data...', spinner='dots') as spinner:
+        page_source = browser.page_source
+        soup = BeautifulSoup(page_source, "lxml")
+
+        rows = soup.find_all("tr", class_="tabledetail")
+        for row in rows:
+            cells = row.find_all("td")
+            data = [cell.get_text(separator='<br>', strip=True).replace(
+                '<br>', ' ') for cell in cells]
+            data.pop(0)  # remove first index
+            # remove email
+            data = [re.sub(r'\S+@\S+', '', item) for item in data]
+            # remove number before (Tel) and (Tel) itself
+            data = [re.sub(r'\d+(?=\(Tel\))\(Tel\)', '', item)
+                    for item in data]
+            # remove any trailing whitespace
+            data = [item.strip() for item in data]
+            # remove (hp)
+            data = [re.sub(r'\(Hp\)', '', item) for item in data]
+            # assume the license ID is the first element in the array
+            scraped_cable_workers_ids.append(data[0])
+
+        # use Halo to display success message
+        spinner.succeed('Scraping Cable Detection Worker complete')
 
 
 def scrape():
     # Launch browser
     browser = launch_browser()
-    selectRadioButton = browser.find_element(By.ID, "seachAllRadio").click()
+    selectElectricalRadioButton = browser.find_element(
+        By.ID, "seachAllRadio").click()
     selectDropDown = Select(browser.find_element(
         By.NAME, "WorkerType")).select_by_value("OFFERE")
 
     # Bypass CAPTCHA for Electrician who offer consumer services
     bypass_captcha(browser)
     scrape_electrical_worker_data(browser)
-    print("Scraped gas workers:", scraped_electrician_ids)
+    print("Scraped Electrical Workers:", scraped_electrician_ids)
 
     # Scrape Gas Service Workers who offer consumer services
-    selectTagClass = browser.find_element(
+    selectGasTagClass = browser.find_element(
         By.LINK_TEXT, "Gas Service Worker").click()
+    selectGasDropdown = Select(browser.find_element(
+        By.NAME, "WorkerType")).select_by_value("OFFERG")
     selectResidentialCheckbox = browser.find_element(
         By.ID, "chkResidential").click()
     selectchkNonResidentialCheckbox = browser.find_element(
@@ -141,16 +168,53 @@ def scrape():
     # Bypass CAPTCHA for Gas Service Workers who offer consumer services
     bypass_captcha(browser)
     scrape_gas_service_worker_data(browser)
-    print("Scraped gas workers:", scraped_gas_workers_ids)
+    print("Scraped Gas Workers:", scraped_gas_workers_ids)
+
+    # Scrape Cable Detection Workers
+    selectCableTagClass = browser.find_element(
+        By.LINK_TEXT, "Cable Detection Worker").click()
+    selectCableRadioButton = browser.find_element(
+        By.ID, "seachAllRadio").click()
+
+    bypass_captcha(browser)
+    scrape_cable_worker_data(browser)
+    print("Scraped Cable Workers:", scraped_cable_workers_ids)
+
+    # check if any of the arrays are empty
+    check_if_lists_are_empty()
+
+
+def check_if_lists_are_empty():
+    # check if any of the arrays are empty
+    lists_to_check = [scraped_electrician_ids,
+                      scraped_gas_workers_ids, scraped_cable_workers_ids]
+    while any(not lst for lst in lists_to_check):
+        print("One or more lists are empty. Scraping data again...")
+        scrape()
+        print("Scraping complete. Checking lists again...")
+        lists_to_check = [scraped_electrician_ids,
+                          scraped_gas_workers_ids, scraped_cable_workers_ids]
+
+    print("\033[32mAll lists are non-empty. Everything is ready to go. \033[0m")
+
+    # create a dictionary to store the license IDs and their corresponding list names
+    id_to_list = {}
+    for id in scraped_electrician_ids:
+        id_to_list[id] = 'Electrician'
+    for id in scraped_gas_workers_ids:
+        id_to_list[id] = 'Gas Worker'
+    for id in scraped_cable_workers_ids:
+        id_to_list[id] = 'Cable Worker'
 
     while True:
         user_input = input(
             "\033[33mEnter the license ID or type 'q' to quit: \033[0m")
         if user_input.lower() == 'q':
             break
-        # check scraped_electrician_ids for user_input
-        if user_input in scraped_electrician_ids or user_input in scraped_gas_workers_ids:
-            print("\033[32mLicense ID {} found.\033[0m".format(user_input))
+        # check the dictionary for user_input
+        if user_input in id_to_list:
+            print("\033[32m{} License ID found: {}.\033[0m".format(
+                id_to_list[user_input], user_input))
         else:
             print("\033[31mLicense ID {} not found.\033[0m".format(user_input))
 
