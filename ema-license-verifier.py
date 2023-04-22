@@ -7,6 +7,7 @@ from bs4 import BeautifulSoup
 from apscheduler.schedulers.background import BackgroundScheduler
 from halo import Halo  # import Halo package
 from dotenv import dotenv_values
+import re
 import atexit
 
 
