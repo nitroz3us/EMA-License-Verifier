@@ -20,6 +20,6 @@ The website I am scraping is the official Energy Market Authority (EMA).
 Honestly, I just wanted to try out Selenium + BeautifulSoup.
 
 ## Future Projects
-- [ ] Implement Gas Service Worker licenses.
+- [x] Implement Gas Service Worker licenses.
 - [ ] Implement function to be able to verify from a photo (e.g. License card).
 - [ ] Migrate the project over to front-end instead of command line.
