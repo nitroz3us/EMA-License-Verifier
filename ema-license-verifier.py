@@ -13,6 +13,7 @@ import atexit
 
 scraped_electrician_ids = []
 scraped_gas_workers_ids = []
+scraped_cable_workers_ids = []  # TODO: add cable worker scraper
 
 
 def launch_browser():
@@ -35,20 +36,6 @@ def launch_browser():
         return browser
 
 
-# def launch_browser():
-#     chrome_options = Options()
-#     chrome_options.add_argument('--no-sandbox')
-#     chrome_options.add_argument('--window-size=700,700')
-#     chrome_options.add_argument('--headless')
-#     chrome_options.add_argument('--disable-gpu')
-#     chrome_options.add_argument('--disable-dev-shm-usage')
-#     # browser = webdriver.Chrome(options=chrome_options, executable_path='/usr/local/bin/chromedriver')
-#     browser = webdriver.Chrome(options=chrome_options)
-#     browser.get(
-#         "https://elise.ema.gov.sg/elise/findworkerservlet?Operation=Get&Item=EL")
-#     return browser
-
-
 def bypass_captcha(browser):
     with Halo(text='1. Bypassing CAPTCHA', spinner='dots') as spinner:  # use Halo to display spinner
         captchaImg = browser.find_element(By.ID, "img")
@@ -62,7 +49,6 @@ def bypass_captcha(browser):
             print(e)
         else:
             code = result['code']
-            # print(code)
             browser.find_element(By.NAME, "captcha").send_keys(code)
             browser.find_element(By.NAME, "cmdSearchByName").click()
         # use Halo to display success message
@@ -126,11 +112,14 @@ def scrape_gas_service_worker_data(browser):
         spinner.succeed('Scraping gas service worker complete')
 
 
+def scrape_cable_worker_data(browser):
+    return "TODO scrape cable worker data"
+
+
 def scrape():
     # Launch browser
     browser = launch_browser()
     selectRadioButton = browser.find_element(By.ID, "seachAllRadio").click()
-    # Select dropdown for Electrician who offer consumer services
     selectDropDown = Select(browser.find_element(
         By.NAME, "WorkerType")).select_by_value("OFFERE")
 
@@ -139,7 +128,7 @@ def scrape():
     scrape_electrical_worker_data(browser)
     print("Scraped gas workers:", scraped_electrician_ids)
 
-    # Scrape gas service workers
+    # Scrape Gas Service Workers who offer consumer services
     selectTagClass = browser.find_element(
         By.LINK_TEXT, "Gas Service Worker").click()
     selectResidentialCheckbox = browser.find_element(
