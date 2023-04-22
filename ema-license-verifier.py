@@ -182,7 +182,7 @@ def scrape():
     # selectCableRadioButton = browser.find_element(
     #     By.ID, "seachAllRadio").click()
 
-    # bypass_captcha(browser)
+    bypass_captcha(browser)
     scrape_cable_worker_data(browser)
     print("Scraped Cable Workers:", scraped_cable_workers_ids)
 
