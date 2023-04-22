@@ -6,7 +6,7 @@ from twocaptcha import TwoCaptcha
 from bs4 import BeautifulSoup
 from apscheduler.schedulers.background import BackgroundScheduler
 from halo import Halo  # import Halo package
-import re
+from dotenv import dotenv_values
 import atexit
 
 
@@ -52,7 +52,9 @@ def bypass_captcha(browser):
     with Halo(text='1. Bypassing CAPTCHA', spinner='dots') as spinner:  # use Halo to display spinner
         captchaImg = browser.find_element(By.ID, "img")
         captchaImg.screenshot('./captchas/captcha.png')
-        api_key = 'YOUR_API_KEY'
+        config = dotenv_values(".env")
+        api_key = config['API_KEY']
+        # print(config['API_KEY'], end='\n')
         # print(api_key)  # remove this later
         solver = TwoCaptcha(api_key)
         try:
