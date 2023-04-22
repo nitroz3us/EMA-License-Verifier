@@ -52,7 +52,7 @@ def bypass_captcha(browser):
     with Halo(text='1. Bypassing CAPTCHA', spinner='dots') as spinner:  # use Halo to display spinner
         captchaImg = browser.find_element(By.ID, "img")
         captchaImg.screenshot('./captchas/captcha.png')
-        api_key = 'f41d954ccdabcc0d0462e4b72e1739f5'
+        api_key = 'YOUR_API_KEY'
         # print(api_key)  # remove this later
         solver = TwoCaptcha(api_key)
         try:
