@@ -53,9 +53,7 @@ def bypass_captcha(browser):
         captchaImg = browser.find_element(By.ID, "img")
         captchaImg.screenshot('./captchas/captcha.png')
         config = dotenv_values(".env")
-        api_key = config['API_KEY']
-        # print(config['API_KEY'], end='\n')
-        # print(api_key)  # remove this later
+        api_key = config['API_KEY']  # get API key from .env file
         solver = TwoCaptcha(api_key)
         try:
             result = solver.normal('./captchas/captcha.png')
