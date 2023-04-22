@@ -143,6 +143,12 @@ def scrape_cable_worker_data(browser):
 def scrape():
     # Launch browser
     browser = launch_browser()
+    try:
+        selectElectricalTagClass = browser.find_element(
+            By.LINK_TEXT, "Electrical Worker").click()
+    except:
+        print("Unable to locate selectElectricalTagClass, will continue as normal...")
+
     selectElectricalRadioButton = browser.find_element(
         By.ID, "seachAllRadio").click()
     selectDropDown = Select(browser.find_element(
@@ -173,10 +179,10 @@ def scrape():
     # Scrape Cable Detection Workers
     selectCableTagClass = browser.find_element(
         By.LINK_TEXT, "Cable Detection Worker").click()
-    selectCableRadioButton = browser.find_element(
-        By.ID, "seachAllRadio").click()
+    # selectCableRadioButton = browser.find_element(
+    #     By.ID, "seachAllRadio").click()
 
-    bypass_captcha(browser)
+    # bypass_captcha(browser)
     scrape_cable_worker_data(browser)
     print("Scraped Cable Workers:", scraped_cable_workers_ids)
 
@@ -210,6 +216,8 @@ def check_if_lists_are_empty():
         user_input = input(
             "\033[33mEnter the license ID or type 'q' to quit: \033[0m")
         if user_input.lower() == 'q':
+            # quit chrome browser
+            browser.quit()
             break
         # check the dictionary for user_input
         if user_input in id_to_list:
