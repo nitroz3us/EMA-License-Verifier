@@ -78,7 +78,7 @@ def scrape_electrical_worker_data(browser):
             data = [re.sub(r'\(Hp\)', '', item) for item in data]
             # assume the license ID is the first element in the array
             # only show license ID for now
-            scraped_electrician_ids.append(data[0])
+            scraped_electrician_ids.append(data)
 
         # use Halo to display success message
         spinner.succeed('Scraping Electical Worker complete')
@@ -106,7 +106,7 @@ def scrape_gas_service_worker_data(browser):
             # remove (hp)
             data = [re.sub(r'\(Hp\)', '', item) for item in data]
             # assume the license ID is the first element in the array
-            scraped_gas_workers_ids.append(data[0])
+            scraped_gas_workers_ids.append(data)
 
         # use Halo to display success message
         spinner.succeed('Scraping Gas Service Worker complete')
@@ -124,17 +124,11 @@ def scrape_cable_worker_data(browser):
             data = [cell.get_text(separator='<br>', strip=True).replace(
                 '<br>', ' ') for cell in cells]
             data.pop(0)  # remove first index
-            # remove email
-            data = [re.sub(r'\S+@\S+', '', item) for item in data]
-            # remove number before (Tel) and (Tel) itself
-            data = [re.sub(r'\d+(?=\(Tel\))\(Tel\)', '', item)
-                    for item in data]
             # remove any trailing whitespace
             data = [item.strip() for item in data]
-            # remove (hp)
-            data = [re.sub(r'\(Hp\)', '', item) for item in data]
             # assume the license ID is the first element in the array
-            scraped_cable_workers_ids.append(data[0])
+            # LicenseID, Name, License Expiry Date
+            scraped_cable_workers_ids.append(data)
 
         # use Halo to display success message
         spinner.succeed('Scraping Cable Detection Worker complete')
@@ -149,8 +143,6 @@ def scrape():
     except:
         print("Unable to locate selectElectricalTagClass, will continue as normal...")
 
-    selectElectricalRadioButton = browser.find_element(
-        By.ID, "seachAllRadio").click()
     selectDropDown = Select(browser.find_element(
         By.NAME, "WorkerType")).select_by_value("OFFERE")
 
@@ -179,8 +171,6 @@ def scrape():
     # Scrape Cable Detection Workers
     selectCableTagClass = browser.find_element(
         By.LINK_TEXT, "Cable Detection Worker").click()
-    # selectCableRadioButton = browser.find_element(
-    #     By.ID, "seachAllRadio").click()
 
     bypass_captcha(browser)
     scrape_cable_worker_data(browser)
@@ -204,15 +194,18 @@ def check_if_lists_are_empty():
     print("\033[32mAll lists are non-empty. Everything is ready to go. \033[0m")
 
     # create a dictionary to store the license IDs and their corresponding list names
+    # e.g. {'19950783': 'Cable Worker'}
     id_to_list = {}
     for id in scraped_electrician_ids:
-        id_to_list[id] = 'Electrician'
+        # get the first index of the list which is the license IDs and use it as the dict key
+        id_to_list[id[0]] = 'Electrician'
     for id in scraped_gas_workers_ids:
-        id_to_list[id] = 'Gas Worker'
+        id_to_list[id[0]] = 'Gas Worker'
     for id in scraped_cable_workers_ids:
-        id_to_list[id] = 'Cable Worker'
+        id_to_list[id[0]] = 'Cable Worker'
 
     while True:
+        # TODO: need to fix the q input
         user_input = input(
             "\033[33mEnter the license ID or type 'q' to quit: \033[0m")
         if user_input.lower() == 'q':
